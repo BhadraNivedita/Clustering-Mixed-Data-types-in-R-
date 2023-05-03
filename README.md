@@ -33,7 +33,7 @@ college_preprocessed <- College %>%
 glimpse(college_preprocessed)
 
 
-# Remove college name before clustering
+Remove college name before clustering
 
 ```
 gower_dist <- daisy(college_preprocessed[, -1],
@@ -43,10 +43,19 @@ gower_dist <- daisy(college_preprocessed[, -1],
 gower_mat <- as.matrix(gower_dist)
 ```
 
-# Output most similar pair
+Output most similar pair:
 
 ```college_preprocessed[
   which(gower_mat == min(gower_mat[gower_mat != min(gower_mat)]),
         arr.ind = TRUE)[1, ], ]                    
 ```
+Output most dissimilar pair:
 
+```
+college_preprocessed[
+  which(gower_mat == max(gower_mat[gower_mat != max(gower_mat)]),
+        arr.ind = TRUE)[1, ], ]
+```   
+ We have calculated the dissimilarity matrix and now we would chose a suitable clustering algorithm. We would chose a popular method named partitioning around medoids (PAM).
+ 
+ From wikibook's page, "The PAM algorithm was developed by Leonard Kaufman and Peter J. Rousseeuw, and this algorithm is very similar to K-means, mostly because both are partitional algorithms, in other words, both break the dataset into groups (clusters), and both work by trying to minimize the error, but PAM works with Medoids, that are an entity of the dataset that represent the group in which it is inserted, and K-means works with Centroids, that are artificially created entity that represent its cluster."
