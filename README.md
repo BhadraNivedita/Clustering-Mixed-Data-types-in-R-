@@ -117,5 +117,5 @@ tsne_data <- tsne_obj$Y %>%
 ggplot(aes(x = X, y = Y), data = tsne_data) +
   geom_point(aes(color = cluster))
 ```
-![tSNE_plot](tSNE_plot.jpg)
+![tSNE_plot](tSNE_plot.png)
 
