@@ -117,5 +117,5 @@ tsne_data <- tsne_obj$Y %>%
 ggplot(aes(x = X, y = Y), data = tsne_data) +
   geom_point(aes(color = cluster))
 ```
-
+https://github.com/BhadraNivedita/Clustering-Mixed-Data-types-in-R-/blob/efe0ec775e06ebb3cfa57bdccfb88309001998b0/tSNE_plot.png
  
