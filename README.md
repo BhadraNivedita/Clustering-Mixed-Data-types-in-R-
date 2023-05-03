@@ -59,3 +59,63 @@ college_preprocessed[
  We have calculated the dissimilarity matrix and now we would chose a suitable clustering algorithm. We would chose a popular method named partitioning around medoids (PAM).
  
  From wikibook's page, "The PAM algorithm was developed by Leonard Kaufman and Peter J. Rousseeuw, and this algorithm is very similar to K-means, mostly because both are partitional algorithms, in other words, both break the dataset into groups (clusters), and both work by trying to minimize the error, but PAM works with Medoids, that are an entity of the dataset that represent the group in which it is inserted, and K-means works with Centroids, that are artificially created entity that represent its cluster."
+ 
+ 
+ We would calculate silhouette width for many k using PAM
+
+```
+sil_width <- c(NA)
+
+for(i in 2:10){
+  
+  pam_fit <- pam(gower_dist,
+                 diss = TRUE,
+                 k = i)
+  
+  sil_width[i] <- pam_fit$silinfo$avg.width
+  
+}
+```
+
+```
+# Plot sihouette width (higher is better)
+
+plot(1:10, sil_width,
+     xlab = "Number of clusters",
+     ylab = "Silhouette Width")
+lines(1:10, sil_width)
+```
+
+
+``` pam_fit <- pam(gower_dist, diss = TRUE, k = 3)
+
+pam_results <- college_clean %>%
+  dplyr::select(-name) %>%
+  mutate(cluster = pam_fit$clustering) %>%
+  group_by(cluster) %>%
+  do(the_summary = summary(.))
+
+pam_results$the_summary
+
+```
+In PAM method the medoids serve as exemplars of each cluster.
+```
+college_preprocessed[pam_fit$medoids, ]
+```
+
+We can visualize the clusters with t-SNE plot.
+
+```
+tsne_obj <- Rtsne(gower_dist, is_distance = TRUE)
+
+tsne_data <- tsne_obj$Y %>%
+  data.frame() %>%
+  setNames(c("X", "Y")) %>%
+  mutate(cluster = factor(pam_fit$clustering),
+         name = college_clean$name)
+
+ggplot(aes(x = X, y = Y), data = tsne_data) +
+  geom_point(aes(color = cluster))
+```
+
+ 
