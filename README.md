@@ -19,7 +19,7 @@ There are other packages to calculate dissimilarity matrix. We chose this cluste
 Preprocessing the data before clustering.
 
 ```
-college_clean <- College %>%
+college_preprocessed <- College %>%
   mutate(name = row.names(.),
          accept_rate = Accept/Apps,
          isElite = cut(Top10perc,
@@ -30,5 +30,23 @@ college_clean <- College %>%
   select(name, accept_rate, Outstate, Enroll,
          Grad.Rate, Private, isElite)
 ```
-glimpse(college_clean)
+glimpse(college_preprocessed)
+
+
+# Remove college name before clustering
+
+```
+gower_dist <- daisy(college_preprocessed[, -1],
+                    metric = "gower",
+                    type = list(logratio = 3))
+                                       
+gower_mat <- as.matrix(gower_dist)
+```
+
+# Output most similar pair
+
+```college_preprocessed[
+  which(gower_mat == min(gower_mat[gower_mat != min(gower_mat)]),
+        arr.ind = TRUE)[1, ], ]                    
+```
 
