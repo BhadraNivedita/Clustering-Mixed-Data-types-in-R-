@@ -112,7 +112,7 @@ tsne_data <- tsne_obj$Y %>%
   data.frame() %>%
   setNames(c("X", "Y")) %>%
   mutate(cluster = factor(pam_fit$clustering),
-         name = college_clean$name)
+         name = college_preprocessed$name)
 
 ggplot(aes(x = X, y = Y), data = tsne_data) +
   geom_point(aes(color = cluster))
